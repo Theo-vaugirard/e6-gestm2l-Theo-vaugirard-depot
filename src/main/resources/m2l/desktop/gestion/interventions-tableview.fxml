@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.control.TableView?>
+<?import javafx.scene.control.TableColumn?>
+
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.image.Image?>
+<?import javafx.scene.control.cell.PropertyValueFactory?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.control.Label?>
+
+<VBox xmlns:fx="http://javafx.com/fxml"
+      fx:controller="m2l.desktop.gestion.controller.InterventionsTableviewController">
+    <children>
+
+        <VBox>
+
+            <HBox style="fx-background-color:black" alignment="CENTER">
+                <Label fx:id="dateJour" minHeight="16" minWidth="100" prefHeight="100.0"
+                       text="Toutes les interventions"
+                       style="-fx-font-size:20; -fx-font-family:Impact; -fx-text-fill:black;"
+                />
+            </HBox>
+
+
+            <TableView fx:id="tableviewInterventions" layoutX="59.0" layoutY="55.0" prefHeight="500.0" prefWidth="200.0">
+                <columns>
+                    <TableColumn fx:id="motifCol" prefWidth="150.0" text="Motif"/>
+                    <TableColumn fx:id="salleCol" prefWidth="150" text="Salle"/>
+                    <TableColumn fx:id="intervenantCol" prefWidth="150.0" text="Intervenant"/>
+                    <TableColumn fx:id="contactCol" prefWidth="150" text="Contact"/>
+                    <TableColumn fx:id="dateHeureCol" prefWidth="150" text="Date Heure"/>
+                </columns>
+            </TableView>
+
+
+            <HBox spacing="100" alignment="CENTER"  minWidth="100" prefHeight="100.0" >
+
+                <ImageView onMouseClicked="#ajoutIntervention" accessibleText="Ajouter une intervention" fitWidth="40"
+                           preserveRatio="true">
+                    <image>
+                        <Image url="@images/add.png"/>
+                    </image>
+                </ImageView>
+
+                <ImageView  fitWidth="40" preserveRatio="true">
+                    <image>
+                        <Image url="@images/remove.png" />
+                    </image>
+                </ImageView>
+
+                <ImageView  fitWidth="40" preserveRatio="true">
+                    <image>
+                        <Image url="@images/eye.png" />
+                    </image>
+                </ImageView>
+
+            </HBox>
+        </VBox>
+    </children>
+</VBox>
