@@ -28,6 +28,7 @@ public class InterventionsTableviewController implements Initializable {
     /**
      * récupération des éléments définis dans la vue (fxml)
      */
+
     @FXML
     public TableColumn<Intervention, String> salleCol;
     @FXML

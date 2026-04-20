@@ -40,7 +40,7 @@
                     </graphic>
 
 
-
+                    <fx:include source="Sallestableview.fxml" fx:id="liste_salles"/>
                 </Tab>
 
 

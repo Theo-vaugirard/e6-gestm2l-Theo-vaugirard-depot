@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.control.TableView?>
+<?import javafx.scene.control.TableColumn?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.control.Label?>
+
+<VBox xmlns:fx="http://javafx.com/fxml"
+      fx:controller="m2l.desktop.gestion.controller.SallesTableviewController">
+
+    <children>
+
+        <VBox>
+
+            <HBox alignment="CENTER">
+                <Label text="Liste des salles"
+                       style="-fx-font-size:20; -fx-font-family:Impact;" />
+            </HBox>
+
+            <TableView fx:id="tableviewSalles"
+                       prefHeight="500"
+                       prefWidth="800">
+
+                <columns>
+
+                    <TableColumn fx:id="nomCol"
+                                 text="Nom"
+                                 prefWidth="200"/>
+
+                    <TableColumn fx:id="capaciteCol"
+                                 text="Capacité"
+                                 prefWidth="150"/>
+
+                    <TableColumn fx:id="equipementsCol"
+                                 text="Équipements"
+                                 prefWidth="300"/>
+
+                    <TableColumn fx:id="batimentCol"
+                                 text="Bâtiment"
+                                 prefWidth="150"/>
+
+                </columns>
+
+            </TableView>
+
+        </VBox>
+
+    </children>
+</VBox>

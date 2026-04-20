@@ -13,7 +13,7 @@ import java.util.List;
 public class ModelQueries {
 
     // URL de l'API à modifier pour correspondre à votre API
-    private static String API_URL = "http://localhost:8080/SIO2/laravel/e6/site_m2l_12.4/public/api/";
+    private static String API_URL = "http://localhost:8080/e6-site-m2l-Theo-vaugirard/public/api/";
 
 
     /************************************  INTERVENTIONS  ****************************************/

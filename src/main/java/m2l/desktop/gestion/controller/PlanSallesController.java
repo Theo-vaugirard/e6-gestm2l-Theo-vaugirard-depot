@@ -5,12 +5,16 @@
  */
 package m2l.desktop.gestion.controller;
 
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.Group;
 import javafx.scene.Scene;
 import javafx.scene.control.Label;
+import javafx.scene.control.TableColumn;
+import javafx.scene.control.TableView;
 import javafx.scene.control.Tooltip;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.AnchorPane;
@@ -29,10 +33,34 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.ResourceBundle;
 
-/**
- * @author nathalie
- */
 public class PlanSallesController implements Initializable {
+
+    /*
+     * 1. récupération des éléments définis dans la vue (fxml)
+
+
+    @FXML
+    private TableView<Salle> tableSalles;
+
+    @FXML
+    private TableColumn<Salle, String> colNom;
+
+    @FXML
+    public TableColumn<Salle, Number> capaciteCol;
+
+    @FXML
+    private TableColumn<Salle, String> colEquipements;
+
+    @FXML
+    private TableColumn<Salle, String> colBatiment;
+
+    // liste des salles
+    private List<Salle> liste_des_salles = new ArrayList<>();
+
+    private ObservableList<Salle> donnees_salles;
+
+     * Fin 1. récupération des éléments définis dans la vue (fxml)
+     */
 
     //membres liés à un élémment graphique dans le FXML
     @FXML
@@ -42,6 +70,7 @@ public class PlanSallesController implements Initializable {
     @FXML
     public AnchorPane zonePlan;
 
+
     //Membres standards
     private Group batimentD, batimentC, batimentB, batimentA, HallAccueil, pins;
 
@@ -50,12 +79,25 @@ public class PlanSallesController implements Initializable {
 
     private int xleft = 50, ytop = 25, ybottom = 250;
 
+
+
     @Override
     public void initialize(URL url, ResourceBundle rb) {
 
         this.listePlanSalles = new ArrayList<>();
 
+        /*
+         * 2. Appel dans initialize()
 
+        try {
+            configurerOngletSalles();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+
+         * Fin 2. Appel dans initialize()
+         */
 
         System.out.println("Chargement des salles...");
 
@@ -67,6 +109,38 @@ public class PlanSallesController implements Initializable {
         afficherRezDeChaussee();
 
     }
+
+    /*
+     * 3. Méthode principale (comme les interventions)
+
+
+    private void configurerOngletSalles() {
+
+        System.out.println("Chargement des salles...");
+
+        liste_des_salles = ModelQueries.getSallesFromApi();
+
+        for (Salle s : liste_des_salles) {
+            System.out.println(s);
+        }
+
+        colNom.setCellValueFactory(cell -> cell.getValue().nomProperty());
+        capaciteCol.setCellValueFactory(cell -> cell.getValue().capaciteProperty());
+        colEquipements.setCellValueFactory(cell -> cell.getValue().equipementsProperty());
+        colBatiment.setCellValueFactory(cell -> cell.getValue().batimentProperty());
+
+        capaciteCol.setStyle("-fx-alignment: CENTER;");
+        colBatiment.setStyle("-fx-alignment: CENTER;");
+
+        donnees_salles = FXCollections.observableArrayList(liste_des_salles);
+
+        // ✅ CORRECTION ICI
+        tableSalles.setItems(donnees_salles);
+    }
+
+
+     * Fin 3. Méthode principale (comme les interventions)
+     */
 
     public Salle trouverSalleParNom(String nom) {
         for (Salle s : this.listeSalles) {
@@ -380,4 +454,14 @@ public class PlanSallesController implements Initializable {
         }
     }
 
+    /*
+    public List<Salle> getListe_des_salles() {
+        return liste_des_salles;
+    }
+
+    public void setListe_des_salles(List<Salle> liste_des_salles) {
+        this.liste_des_salles = liste_des_salles;
+    }
+
+     */
 }
