@@ -4,9 +4,15 @@ import javafx.beans.property.SimpleIntegerProperty;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.value.ObservableValue;
 
-/**
- *
- * @author nathalie
+/*
+📦 5. CLASSE MÉTIER (Salle.java)
+-----------------------------------------------------------
+- Représente une salle avec :
+  • nom
+  • capacité
+  • équipements
+  • bâtiment
+- Utilise des propriétés JavaFX (StringProperty, IntegerProperty)
  */
 public class Salle {
 
@@ -110,7 +116,7 @@ public class Salle {
         return new SimpleStringProperty(equipements);
     }
 
- public SimpleIntegerProperty capaciteProperty() {
+    public SimpleIntegerProperty capaciteProperty() {
         return new SimpleIntegerProperty(capacite);
     }
 

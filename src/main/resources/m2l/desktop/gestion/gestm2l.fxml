@@ -6,6 +6,7 @@
 <?import javafx.scene.image.*?>
 
 <?import javafx.scene.layout.VBox?>
+
 <BorderPane xmlns:fx="http://javafx.com/fxml">
     <top>
 
@@ -39,7 +40,7 @@
                         </ImageView>
                     </graphic>
 
-
+                <!-- on affiche la liste des salles dans l’onglet -->
                     <fx:include source="Sallestableview.fxml" fx:id="liste_salles"/>
                 </Tab>
 
@@ -87,7 +88,6 @@
                     </graphic>
 
                     <fx:include source="climatiseurs-tableview.fxml" fx:id="listeClimatiseurs"/>
-
                 </Tab>
 
             </tabs>

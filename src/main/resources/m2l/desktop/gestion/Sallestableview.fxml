@@ -6,6 +6,23 @@
 <?import javafx.scene.layout.HBox?>
 <?import javafx.scene.control.Label?>
 
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.image.Image?>
+
+<!--
+🖥️ 2. FICHIER FXML (Sallestableview.fxml)
+
+- Définit l’interface graphique
+- Contient un TableView avec 4 colonnes :
+  • nomCol → Nom de la salle
+  • capaciteCol → Capacité
+  • equipementsCol → Équipements
+  • batimentCol → Bâtiment
+- Relié au controller : SallesTableviewController
+- Inclus dans un onglet via :
+  <fx:include source="Sallestableview.fxml"/>
+ -->
+
 <VBox xmlns:fx="http://javafx.com/fxml"
       fx:controller="m2l.desktop.gestion.controller.SallesTableviewController">
 
@@ -46,5 +63,29 @@
 
         </VBox>
 
+        <HBox spacing="50" alignment="CENTER">
+
+            <!-- Bouton pour ajouter une salle -->
+            <ImageView onMouseClicked="#ajouterSalle"
+                       fitWidth="40"
+                       preserveRatio="true">
+                <image>
+                    <Image url="@images/add.png"/>
+                </image>
+            </ImageView>
+
+            <!-- Bouton pour supprimer une salle -->
+            <ImageView onMouseClicked="#supprimerSalle"
+                       fitWidth="40"
+                       preserveRatio="true">
+                <image>
+                    <Image url="@images/remove.png"/>
+                </image>
+            </ImageView>
+
+        </HBox>
+
     </children>
+
 </VBox>
+

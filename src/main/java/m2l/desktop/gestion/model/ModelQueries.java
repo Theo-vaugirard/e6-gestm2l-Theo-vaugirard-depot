@@ -3,12 +3,21 @@ package m2l.desktop.gestion.model;
 import com.google.gson.Gson;
 
 import java.io.IOException;
+import java.io.OutputStream;
 import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.ProtocolException;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
+
+/*
+🌐 4. ACCÈS AUX DONNÉES (ModelQueries)
+-----------------------------------------------------------
+- Appelle l’API REST
+- Récupère les salles au format JSON
+- Convertit en objets Java (Salle)
+ */
 
 public class ModelQueries {
 
@@ -199,9 +208,9 @@ public class ModelQueries {
                 e.printStackTrace();
             }
 
-              int responseCode = conn.getResponseCode();
+            int responseCode = conn.getResponseCode();
 
-              System.out.println("Response Code : " + responseCode);
+            System.out.println("Response Code : " + responseCode);
 
             conn.disconnect();
         }catch (Exception e) {
@@ -230,5 +239,46 @@ public class ModelQueries {
         } catch (Exception e) {
             e.printStackTrace();
         }
+    }
+
+    public static Salle ajouterSalleApi(Salle salle) {
+
+        try {
+            URL url = new URL("http://localhost:8000/api/salles"); // adapte ton URL
+            HttpURLConnection conn = (HttpURLConnection) url.openConnection();
+
+            conn.setRequestMethod("POST");
+            conn.setRequestProperty("Content-Type", "application/json");
+            conn.setDoOutput(true);
+
+            // JSON envoyé
+            String jsonInput = "{"
+                    + "\"nom\":\"" + salle.getNom() + "\","
+                    + "\"capacite\":" + salle.getCapacite() + ","
+                    + "\"equipements\":\"" + salle.getEquipements() + "\","
+                    + "\"services\":null,"
+                    + "\"batiment\":\"" + salle.getBatiment() + "\""
+                    + "}";
+
+            // Envoi
+            OutputStream os = conn.getOutputStream();
+            os.write(jsonInput.getBytes());
+            os.flush();
+            os.close();
+
+            int responseCode = conn.getResponseCode();
+
+            if (responseCode == 200 || responseCode == 201) {
+                System.out.println("Salle ajoutée avec succès !");
+                return salle; // tu peux améliorer en récupérant le JSON retour
+            } else {
+                System.out.println("Erreur POST : " + responseCode);
+            }
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        return null;
     }
 }
