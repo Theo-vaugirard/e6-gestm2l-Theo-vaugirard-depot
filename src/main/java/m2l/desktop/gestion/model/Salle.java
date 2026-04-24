@@ -5,7 +5,7 @@ import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.value.ObservableValue;
 
 /*
-📦 5. CLASSE MÉTIER (Salle.java)
+📦 5. CLASSE OBJET SALLE (Salle.java)
 -----------------------------------------------------------
 - Représente une salle avec :
   • nom

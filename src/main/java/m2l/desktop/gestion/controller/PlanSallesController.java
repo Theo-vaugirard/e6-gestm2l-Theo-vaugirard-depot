@@ -35,33 +35,6 @@ import java.util.ResourceBundle;
 
 public class PlanSallesController implements Initializable {
 
-    /*
-     * 1. récupération des éléments définis dans la vue (fxml)
-
-
-    @FXML
-    private TableView<Salle> tableSalles;
-
-    @FXML
-    private TableColumn<Salle, String> colNom;
-
-    @FXML
-    public TableColumn<Salle, Number> capaciteCol;
-
-    @FXML
-    private TableColumn<Salle, String> colEquipements;
-
-    @FXML
-    private TableColumn<Salle, String> colBatiment;
-
-    // liste des salles
-    private List<Salle> liste_des_salles = new ArrayList<>();
-
-    private ObservableList<Salle> donnees_salles;
-
-     * Fin 1. récupération des éléments définis dans la vue (fxml)
-     */
-
     //membres liés à un élémment graphique dans le FXML
     @FXML
     public Label rezDeChaussee;
@@ -86,19 +59,6 @@ public class PlanSallesController implements Initializable {
 
         this.listePlanSalles = new ArrayList<>();
 
-        /*
-         * 2. Appel dans initialize()
-
-        try {
-            configurerOngletSalles();
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-
-
-         * Fin 2. Appel dans initialize()
-         */
-
         System.out.println("Chargement des salles...");
 
         //récupération des salles depuis l'API
@@ -109,38 +69,6 @@ public class PlanSallesController implements Initializable {
         afficherRezDeChaussee();
 
     }
-
-    /*
-     * 3. Méthode principale (comme les interventions)
-
-
-    private void configurerOngletSalles() {
-
-        System.out.println("Chargement des salles...");
-
-        liste_des_salles = ModelQueries.getSallesFromApi();
-
-        for (Salle s : liste_des_salles) {
-            System.out.println(s);
-        }
-
-        colNom.setCellValueFactory(cell -> cell.getValue().nomProperty());
-        capaciteCol.setCellValueFactory(cell -> cell.getValue().capaciteProperty());
-        colEquipements.setCellValueFactory(cell -> cell.getValue().equipementsProperty());
-        colBatiment.setCellValueFactory(cell -> cell.getValue().batimentProperty());
-
-        capaciteCol.setStyle("-fx-alignment: CENTER;");
-        colBatiment.setStyle("-fx-alignment: CENTER;");
-
-        donnees_salles = FXCollections.observableArrayList(liste_des_salles);
-
-        // ✅ CORRECTION ICI
-        tableSalles.setItems(donnees_salles);
-    }
-
-
-     * Fin 3. Méthode principale (comme les interventions)
-     */
 
     public Salle trouverSalleParNom(String nom) {
         for (Salle s : this.listeSalles) {
@@ -170,7 +98,8 @@ public class PlanSallesController implements Initializable {
         int y4 = y3 + h3;
 
         for(Salle s: this.listeSalles){
-            if(s.getBatiment().equals("D")){
+            // ✅ CORRECTION : Vérifier que batiment n'est pas null
+            if(s.getBatiment() != null && s.getBatiment().equals("D")){
                 System.out.println("Salle du batiment D : " + s.getNom());
 
                 switch(s.getNom()){
@@ -194,8 +123,7 @@ public class PlanSallesController implements Initializable {
     private void initialiserBatimentC() {
         this.batimentC = new Group();
 
-        //hauteur de la salle marjorelle
-        int h = 75;//(int) this.listePlanSalles.get(0).r.getHeight();
+        int h = 75;
         int w = 75;
 
         int x = this.xleft;
@@ -203,13 +131,13 @@ public class PlanSallesController implements Initializable {
         int c = h / 2;
         int y2 = y1 + h - c;
 
-
         int x1 = x + w;
         int x2 = x1 + c;
         int x3 = x2 + c;
 
         for(Salle s: this.listeSalles) {
-            if (s.getBatiment().equals("C")) {
+            // ✅ CORRECTION : Vérifier que batiment n'est pas null
+            if (s.getBatiment() != null && s.getBatiment().equals("C")) {
                 System.out.println("Salle du batiment C : " + s.getNom());
 
                 switch (s.getNom()) {
@@ -228,7 +156,6 @@ public class PlanSallesController implements Initializable {
                 }
             }
         }
-
     }
 
 
@@ -236,8 +163,7 @@ public class PlanSallesController implements Initializable {
     private void initialiserBatimentB() {
         this.batimentB = new Group();
 
-        //X de la salle marjorelle +200
-        int x = this.xleft + 200;//(int) this.listePlanSalles.get(0).r.getX() + 200;//500;
+        int x = this.xleft + 200;
         int y = this.ytop;
 
         int h1 = 30;
@@ -251,24 +177,25 @@ public class PlanSallesController implements Initializable {
         int w3 = 75;
         int w4 = w3 + 20;
 
-        int y2 = y+h1;
+        int y2 = y + h1;
         int y3 = y2 + h2;
 
         for(Salle s: this.listeSalles) {
-            if (s.getBatiment().equals("B")) {
+            // ✅ CORRECTION : Vérifier que batiment n'est pas null
+            if (s.getBatiment() != null && s.getBatiment().equals("B")) {
                 System.out.println("Salle du batiment B : " + s.getNom());
 
                 switch (s.getNom()) {
                     case "lamour":
                         this.listePlanSalles.add(new PlanSalle(s, new Rectangle(x, y, w, h1)));
                         break;
-                    case "amphithéatre": System.out.println("Création de l'amphi");
+                    case "amphithéatre":
+                        System.out.println("Création de l'amphi");
                         this.listePlanSalles.add(new PlanSalle(s, new Rectangle(x, y2, w, h2)));
                         break;
                     case "Salle de services":
                         this.listePlanSalles.add(new PlanSalle(s, new Rectangle(x, y3, w1, h3)));
                         break;
-
                     case "longwy":
                         this.listePlanSalles.add(new PlanSalle(s, new Rectangle(x + w1 + w2 + 20, y3 - 20, w3, h4)));
                         break;
@@ -277,9 +204,7 @@ public class PlanSallesController implements Initializable {
                         break;
                 }
 
-
-                this.listePlanSalles.add(new PlanSalle(new Salle(999,"Aucune information","B"),  new Rectangle(x + w1, y3, w2, h3)));
-
+                this.listePlanSalles.add(new PlanSalle(new Salle(999,"Aucune information","B"), new Rectangle(x + w1, y3, w2, h3)));
             }
         }
     }
@@ -287,17 +212,16 @@ public class PlanSallesController implements Initializable {
     private void initialiserBatimentA() {
         this.batimentA = new Group();
 
-        //X de la salle marjorelle +370
-        int x1 = this.xleft + 370;//(int) this.listePlanSalles.get(0).r.getX() + 370;
-        //25+30+235 + 40 -20 - 310
+        int x1 = this.xleft + 370;
         int y1 = this.ybottom + 60;
         int c = 80;
-        int x2 = x1 +c ;
+        int x2 = x1 + c;
         int x3 = x2 + c;
         int x4 = x3 + c;
 
         for(Salle s: this.listeSalles) {
-            if (s.getBatiment().equals("A")) {
+            // ✅ CORRECTION : Vérifier que batiment n'est pas null
+            if (s.getBatiment() != null && s.getBatiment().equals("A")) {
                 System.out.println("Salle du batiment A : " + s.getNom());
 
                 switch (s.getNom()) {
@@ -316,7 +240,6 @@ public class PlanSallesController implements Initializable {
                 }
             }
         }
-
     }
 
     private void initialiserHallAccueil() {
@@ -421,47 +344,47 @@ public class PlanSallesController implements Initializable {
     private void configurerPinsSalles() {
         for (int i = 0; i < this.listePlanSalles.size(); i++) {
 
-            Circle c = new Circle((int) (this.listePlanSalles.get(i).r.getX() + this.listePlanSalles.get(i).r.getWidth() / 2), (int) (this.listePlanSalles.get(i).r.getY() + this.listePlanSalles.get(i).r.getHeight() / 2), 10);
+            Circle c = new Circle(
+                    (int) (this.listePlanSalles.get(i).r.getX() + this.listePlanSalles.get(i).r.getWidth() / 2),
+                    (int) (this.listePlanSalles.get(i).r.getY() + this.listePlanSalles.get(i).r.getHeight() / 2),
+                    10
+            );
             c.setFill(Paint.valueOf("CF2140"));
             c.setId("" + i);
 
             ajouterGestionEvenement(c);
-
             this.pins.getChildren().add(c);
-
             this.listePlanSalles.get(i).r.setFill(Paint.valueOf("D8EAF5"));
             this.listePlanSalles.get(i).r.setStroke(Paint.valueOf("5672F5"));
-            //this.listeSalles.get(i)
 
-            switch (this.listePlanSalles.get(i).getSalle().getBatiment()) {
-                case "D":
-                    this.batimentD.getChildren().add(this.listePlanSalles.get(i).r);
-                    break;
-                case "C":
-                    this.batimentC.getChildren().add(this.listePlanSalles.get(i).r);
-                    break;
-                case "B":
-                    this.batimentB.getChildren().add(this.listePlanSalles.get(i).r);
-                    break;
-                case "A":
-                    this.batimentA.getChildren().add(this.listePlanSalles.get(i).r);
-                    break;
-                case "H":
-                    this.HallAccueil.getChildren().add(this.listePlanSalles.get(i).r);
-                    break;
+            // ✅ CORRECTION : Vérifier que batiment n'est pas null
+            String batiment = this.listePlanSalles.get(i).getSalle().getBatiment();
 
+            if (batiment != null) {
+                switch (batiment) {
+                    case "D":
+                        this.batimentD.getChildren().add(this.listePlanSalles.get(i).r);
+                        break;
+                    case "C":
+                        this.batimentC.getChildren().add(this.listePlanSalles.get(i).r);
+                        break;
+                    case "B":
+                        this.batimentB.getChildren().add(this.listePlanSalles.get(i).r);
+                        break;
+                    case "A":
+                        this.batimentA.getChildren().add(this.listePlanSalles.get(i).r);
+                        break;
+                    case "H":
+                        this.HallAccueil.getChildren().add(this.listePlanSalles.get(i).r);
+                        break;
+                    default:
+                        // Gérer les salles sans bâtiment (optionnel)
+                        System.out.println("Salle sans bâtiment: " + this.listePlanSalles.get(i).getSalle().getNom());
+                        break;
+                }
+            } else {
+                System.out.println("Salle avec batiment null: " + this.listePlanSalles.get(i).getSalle().getNom());
             }
         }
     }
-
-    /*
-    public List<Salle> getListe_des_salles() {
-        return liste_des_salles;
-    }
-
-    public void setListe_des_salles(List<Salle> liste_des_salles) {
-        this.liste_des_salles = liste_des_salles;
-    }
-
-     */
 }

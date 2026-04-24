@@ -13,6 +13,7 @@ import m2l.desktop.gestion.model.Salle;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 import java.util.ResourceBundle;
 
 import javafx.scene.control.TextField;
@@ -20,6 +21,9 @@ import javafx.scene.control.Button;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 import javafx.scene.Scene;
+
+import javafx.scene.control.Alert;
+import javafx.scene.control.ButtonType;
 
 /*
 ⚙️ 3. CONTROLLER (SallesTableviewController.java)
@@ -119,16 +123,53 @@ public class SallesTableviewController implements Initializable {
         popup.show();
     }
 
+
     @FXML
     public void supprimerSalle(MouseEvent event) {
 
+        // Récupérer la salle sélectionnée dans le TableView
         Salle salleSelectionnee = tableviewSalles.getSelectionModel().getSelectedItem();
 
         if (salleSelectionnee != null) {
-            donnees_salles.remove(salleSelectionnee);
+            // Demander confirmation avant de supprimer
+            Alert confirmationAlert = new Alert(Alert.AlertType.CONFIRMATION);
+            confirmationAlert.setTitle("Confirmation de suppression");
+            confirmationAlert.setHeaderText("Supprimer la salle");
+            confirmationAlert.setContentText("Êtes-vous sûr de vouloir supprimer la salle : " +
+                    salleSelectionnee.getNom() + " (ID: " +
+                    salleSelectionnee.getNumero_salle() + ") ?");
+
+            Optional<ButtonType> result = confirmationAlert.showAndWait();
+
+            if (result.isPresent() && result.get() == ButtonType.OK) {
+                // Supprimer de l'API
+                boolean success = ModelQueries.deleteSalleApi(salleSelectionnee.getNumero_salle());
+
+                if (success) {
+                    // Supprimer de la liste observable (interface)
+                    donnees_salles.remove(salleSelectionnee);
+                    System.out.println("Salle supprimée avec succès !");
+
+                    // Afficher un message de succès
+                    showAlert("Succès", "Salle supprimée avec succès !", Alert.AlertType.INFORMATION);
+                } else {
+                    System.out.println("Erreur lors de la suppression de la salle");
+                    showAlert("Erreur", "Impossible de supprimer la salle. Veuillez réessayer.", Alert.AlertType.ERROR);
+                }
+            }
         } else {
             System.out.println("Aucune salle sélectionnée !");
+            showAlert("Aucune sélection", "Veuillez sélectionner une salle à supprimer.", Alert.AlertType.WARNING);
         }
+    }
+
+    // Méthode utilitaire pour afficher les alertes
+    private void showAlert(String titre, String message, Alert.AlertType type) {
+        Alert alert = new Alert(type);
+        alert.setTitle(titre);
+        alert.setHeaderText(null);
+        alert.setContentText(message);
+        alert.showAndWait();
     }
 
     private List<Salle> liste_des_salles = new ArrayList<>();

@@ -12,7 +12,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 /*
-🌐 4. ACCÈS AUX DONNÉES (ModelQueries)
+🌐 4. ACCÈS AUX DONNÉES API (ModelQueries)
 -----------------------------------------------------------
 - Appelle l’API REST
 - Récupère les salles au format JSON
@@ -283,6 +283,44 @@ public class ModelQueries {
         } catch (Exception e) {
             e.printStackTrace();
             return null;
+        }
+    }
+
+    // Dans ModelQueries.java, ajoutez cette méthode après ajouterSalleApi
+
+    public static boolean deleteSalleApi(int id) {
+        try {
+            String apiUrl = API_URL + "salles/" + id;
+            URL url = new URL(apiUrl);
+
+            HttpURLConnection conn = (HttpURLConnection) url.openConnection();
+            conn.setRequestMethod("DELETE");
+            conn.setRequestProperty("Content-Type", "application/json; utf-8");
+
+            System.out.println("Suppression de la salle ID: " + id);
+            System.out.println("URL appelée: " + apiUrl);
+
+            int responseCode = conn.getResponseCode();
+            System.out.println("Response Code : " + responseCode);
+
+            if (responseCode == 200 || responseCode == 204) {
+                System.out.println("Salle supprimée avec succès !");
+                conn.disconnect();
+                return true;
+            } else {
+                System.out.println("Erreur DELETE : " + responseCode);
+                if (conn.getErrorStream() != null) {
+                    String errorResponse = Tools.convertInputStreamToString(conn.getErrorStream());
+                    System.out.println("Détail erreur: " + errorResponse);
+                }
+                conn.disconnect();
+                return false;
+            }
+
+        } catch (Exception e) {
+            System.err.println("Exception lors de la suppression: " + e.getMessage());
+            e.printStackTrace();
+            return false;
         }
     }
 
