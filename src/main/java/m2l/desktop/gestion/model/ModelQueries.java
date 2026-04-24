@@ -189,8 +189,7 @@ public class ModelQueries {
         }
     }
 
-    public static void updateClimatiseur(Climatiseur c) throws IOException
-    {
+    public static void updateClimatiseur(Climatiseur c) throws IOException {
         try {
             String apiUrl = API_URL + "climatiseurs/" + c.getId();
 
@@ -213,7 +212,7 @@ public class ModelQueries {
             System.out.println("Response Code : " + responseCode);
 
             conn.disconnect();
-        }catch (Exception e) {
+        } catch (Exception e) {
             e.printStackTrace();
         }
     }
@@ -242,43 +241,49 @@ public class ModelQueries {
     }
 
     public static Salle ajouterSalleApi(Salle salle) {
-
         try {
-            URL url = new URL("http://localhost:8000/api/salles"); // adapte ton URL
-            HttpURLConnection conn = (HttpURLConnection) url.openConnection();
+            // Utiliser la constante API_URL comme pour les climatiseurs
+            String apiUrl = API_URL + "salles";
+            URL url = new URL(apiUrl);
 
+            HttpURLConnection conn = (HttpURLConnection) url.openConnection();
             conn.setRequestMethod("POST");
-            conn.setRequestProperty("Content-Type", "application/json");
+            conn.setRequestProperty("Content-Type", "application/json; utf-8");
             conn.setDoOutput(true);
 
-            // JSON envoyé
-            String jsonInput = "{"
-                    + "\"nom\":\"" + salle.getNom() + "\","
-                    + "\"capacite\":" + salle.getCapacite() + ","
-                    + "\"equipements\":\"" + salle.getEquipements() + "\","
-                    + "\"services\":null,"
-                    + "\"batiment\":\"" + salle.getBatiment() + "\""
-                    + "}";
+            // Utiliser Gson comme pour les climatiseurs (plus propre)
+            String jsonInputString = new Gson().toJson(salle);
+            System.out.println("Insertion de la salle via l'API : " + jsonInputString);
 
-            // Envoi
-            OutputStream os = conn.getOutputStream();
-            os.write(jsonInput.getBytes());
-            os.flush();
-            os.close();
+            try (OutputStream os = conn.getOutputStream()) {
+                byte[] input = jsonInputString.getBytes("utf-8");
+                os.write(input, 0, input.length);
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
 
             int responseCode = conn.getResponseCode();
+            System.out.println("Response Code : " + responseCode);
 
             if (responseCode == 200 || responseCode == 201) {
                 System.out.println("Salle ajoutée avec succès !");
-                return salle; // tu peux améliorer en récupérant le JSON retour
+                conn.disconnect();
+                return salle;
             } else {
                 System.out.println("Erreur POST : " + responseCode);
+                // Lire le message d'erreur si disponible
+                if (conn.getErrorStream() != null) {
+                    String errorResponse = Tools.convertInputStreamToString(conn.getErrorStream());
+                    System.out.println("Détail erreur: " + errorResponse);
+                }
+                conn.disconnect();
+                return null;
             }
 
         } catch (Exception e) {
             e.printStackTrace();
+            return null;
         }
-
-        return null;
     }
+
 }
