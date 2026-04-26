@@ -10,7 +10,7 @@
 <?import javafx.scene.image.Image?>
 
 <!--
-🖥️ 2. FICHIER FXML (Sallestableview.fxml)
+🖥️ 2. FICHIER FXML (SallesTableview.fxml)
 
 - Définit l’interface graphique
 - Contient un TableView avec 4 colonnes :
@@ -20,7 +20,7 @@
   • batimentCol → Bâtiment
 - Relié au controller : SallesTableviewController
 - Inclus dans un onglet via :
-  <fx:include source="Sallestableview.fxml"/>
+  <fx:include source="SallesTableview.fxml"/>
  -->
 
 <VBox xmlns:fx="http://javafx.com/fxml"

@@ -127,39 +127,81 @@ public class SallesTableviewController implements Initializable {
     @FXML
     public void supprimerSalle(MouseEvent event) {
 
-        // Récupérer la salle sélectionnée dans le TableView
         Salle salleSelectionnee = tableviewSalles.getSelectionModel().getSelectedItem();
 
-        if (salleSelectionnee != null) {
-            // Demander confirmation avant de supprimer
-            Alert confirmationAlert = new Alert(Alert.AlertType.CONFIRMATION);
-            confirmationAlert.setTitle("Confirmation de suppression");
-            confirmationAlert.setHeaderText("Supprimer la salle");
-            confirmationAlert.setContentText("Êtes-vous sûr de vouloir supprimer la salle : " +
-                    salleSelectionnee.getNom() + " (ID: " +
-                    salleSelectionnee.getNumero_salle() + ") ?");
-
-            Optional<ButtonType> result = confirmationAlert.showAndWait();
-
-            if (result.isPresent() && result.get() == ButtonType.OK) {
-                // Supprimer de l'API
-                boolean success = ModelQueries.deleteSalleApi(salleSelectionnee.getNumero_salle());
-
-                if (success) {
-                    // Supprimer de la liste observable (interface)
-                    donnees_salles.remove(salleSelectionnee);
-                    System.out.println("Salle supprimée avec succès !");
-
-                    // Afficher un message de succès
-                    showAlert("Succès", "Salle supprimée avec succès !", Alert.AlertType.INFORMATION);
-                } else {
-                    System.out.println("Erreur lors de la suppression de la salle");
-                    showAlert("Erreur", "Impossible de supprimer la salle. Veuillez réessayer.", Alert.AlertType.ERROR);
-                }
-            }
-        } else {
+        if (salleSelectionnee == null) {
             System.out.println("Aucune salle sélectionnée !");
-            showAlert("Aucune sélection", "Veuillez sélectionner une salle à supprimer.", Alert.AlertType.WARNING);
+
+            Alert alert = new Alert(Alert.AlertType.WARNING);
+            alert.setTitle("Aucune sélection");
+            alert.setHeaderText(null);
+            alert.setContentText("Veuillez sélectionner une salle à supprimer.");
+            alert.showAndWait();
+            return;
+        }
+
+        // Vérifier que l'ID est valide (non nul et > 0)
+        int idASupprimer = salleSelectionnee.getNumero_salle();
+        if (idASupprimer <= 0) {
+            System.out.println("ID invalide: " + idASupprimer);
+
+            Alert alert = new Alert(Alert.AlertType.ERROR);
+            alert.setTitle("Erreur");
+            alert.setHeaderText("ID invalide");
+            alert.setContentText("Cette salle a un ID invalide (" + idASupprimer +
+                    "). Elle n'existe probablement pas dans la base de données.\n" +
+                    "Veuillez rafraîchir la liste des salles.");
+            alert.showAndWait();
+
+            // Rafraîchir la liste
+            refreshSallesList();
+            return;
+        }
+
+        // Confirmation avant suppression
+        Alert confirmation = new Alert(Alert.AlertType.CONFIRMATION);
+        confirmation.setTitle("Confirmation de suppression");
+        confirmation.setHeaderText("Supprimer la salle");
+        confirmation.setContentText("Voulez-vous vraiment supprimer la salle \"" +
+                salleSelectionnee.getNom() + "\" (ID: " + idASupprimer + ") ?");
+
+        Optional<ButtonType> result = confirmation.showAndWait();
+
+        if (result.isPresent() && result.get() == ButtonType.OK) {
+            boolean deleted = ModelQueries.deleteSalleApi(idASupprimer);
+
+            if (deleted) {
+                // Supprimer de la liste observable
+                donnees_salles.remove(salleSelectionnee);
+                System.out.println("✓ Salle supprimée avec succès !");
+
+                Alert successAlert = new Alert(Alert.AlertType.INFORMATION);
+                successAlert.setTitle("Succès");
+                successAlert.setHeaderText(null);
+                successAlert.setContentText("La salle a été supprimée avec succès.");
+                successAlert.showAndWait();
+            } else {
+                System.err.println("✗ Erreur lors de la suppression");
+                Alert errorAlert = new Alert(Alert.AlertType.ERROR);
+                errorAlert.setTitle("Erreur");
+                errorAlert.setHeaderText(null);
+                errorAlert.setContentText("Impossible de supprimer la salle (ID: " + idASupprimer + ").\n" +
+                        "Elle n'existe peut-être pas dans la base de données.");
+                errorAlert.showAndWait();
+
+                // Rafraîchir la liste pour enlever les entrées invalides
+                refreshSallesList();
+            }
+        }
+    }
+
+    // Méthode pour rafraîchir la liste des salles
+    private void refreshSallesList() {
+        List<Salle> salles = ModelQueries.getSallesFromApi();
+        if (salles != null) {
+            donnees_salles.clear();
+            donnees_salles.addAll(salles);
+            tableviewSalles.setItems(donnees_salles);
         }
     }
 
