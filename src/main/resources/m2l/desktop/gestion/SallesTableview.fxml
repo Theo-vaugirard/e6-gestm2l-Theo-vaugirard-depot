@@ -53,6 +53,10 @@
                                  text="Équipements"
                                  prefWidth="300"/>
 
+                    <TableColumn fx:id="servicesCol"
+                                 text="Services"
+                                 prefWidth="200"/>
+
                     <TableColumn fx:id="batimentCol"
                                  text="Bâtiment"
                                  prefWidth="150"/>
